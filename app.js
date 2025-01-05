@@ -19,13 +19,21 @@ app.get('/hello', (req, res) => {
 })
 
 app.post('/blog', (req, res) => {
-    const id = uuid();
     const {author, subject, publishDate, blog} = req.body;
 
     if (!author || !subject || !publishDate || !blog) {
         return res.sendStatus(400)
     }res.sendStatus(201)
 })
+    const blgID = uuid();
+
+    const newBlog = {
+        id: blgID,
+        author: author,
+        subject: subject,
+        publishDate:publishDate,
+        blog: blog,
+    }
 
 app.listen(3000, () => {
     console.log(`Example app listening on port ${3000}`)
