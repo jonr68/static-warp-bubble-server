@@ -20,8 +20,11 @@ app.get('/hello', (req, res) => {
 
 app.post('/blog', (req, res) => {
     const id = uuid();
-    console.log(id);
-    res.sendStatus(201)
+    const {author, subject, publishDate, blog} = req.body;
+
+    if (!author || !subject || !publishDate || !blog) {
+        return res.status(400)
+    }res.sendStatus(201)
 })
 
 app.listen(3000, () => {
