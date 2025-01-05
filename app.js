@@ -23,7 +23,7 @@ app.post('/blog', (req, res) => {
     const {author, subject, publishDate, blog} = req.body;
 
     if (!author || !subject || !publishDate || !blog) {
-        return res.status(400)
+        return res.sendStatus(400)
     }res.sendStatus(201)
 })
 
