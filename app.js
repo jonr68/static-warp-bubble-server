@@ -1,3 +1,4 @@
+const fs = require('fs');
 const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
@@ -23,9 +24,27 @@ app.post('/blog', (req, res) => {
     const {author, subject, publishDate, blog} = req.body;
 
     if (!author || !subject || !publishDate || !blog) {
-        return res.status(400)
+        return res.sendStatus(400)
     }res.sendStatus(201)
-})
+
+    const newObject = {
+        author: author,
+        subject: subject,
+        publishDate: publishDate,
+        blog: blog,
+
+    };
+
+
+    fs.writeFile('./newBlog.json', JSON.stringify(newObject), err => {
+        if (err) {
+            console.log(err);
+        } else {
+            console.log('file created');
+        }
+    });
+
+});
 
 app.listen(3000, () => {
     console.log(`Example app listening on port ${3000}`)
