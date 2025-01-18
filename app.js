@@ -27,18 +27,18 @@ app.post('/blog', (req, res) => {
         return res.sendStatus(400)
     }res.sendStatus(201)
 
-    const newObject = {
-        id: id,
-        author: author,
-        subject: subject,
-        publishDate: publishDate,
-        blog: blog,
-
-    };
+    // const newObject = {
+    //     id: id,
+    //     author: author,
+    //     subject: subject,
+    //     publishDate: publishDate,
+    //     blog: blog,
+    //
+    // };
 
 
     fs.writeFile(`./newBlog${id}.HTML`,
-        '<h1> Author: ' + author + '</h1>' + ' <h2> Supject: ' + subject + '</h2>' + ' <h2> Blog: ' + blog + '</h2>' + '</p>' + ' <p> Published On: ' + publishDate + '</p>', err => {
+        `<h1> Author: ${author} </h1> <h2> Supject: ${subject} </h2> <h2> Blog: ${blog} </h2> <p> Published On: ${publishDate} </p>`, err => {
         if (err) {
             console.log(err);
         } else {
