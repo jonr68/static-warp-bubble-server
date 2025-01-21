@@ -20,8 +20,8 @@ app.get('/hello', (req, res) => {
 })
 
 app.post('/blog', (req, res) => {
-    const id = uuid();
     const {author, subject, publishDate, blog} = req.body;
+    const id = subject.replace(' ', '-');
 
     if (!author || !subject || !publishDate || !blog) {
         return res.sendStatus(400)
@@ -37,7 +37,7 @@ app.post('/blog', (req, res) => {
     // };
 
 
-    fs.writeFile(`./newBlog${id}.HTML`,
+    fs.writeFile(`./blog-${id}.HTML`,
         `<h1> Author: ${author} </h1> <h2> Supject: ${subject} </h2> <h2> Blog: ${blog} </h2> <p> Published On: ${publishDate} </p>`, err => {
         if (err) {
             console.log(err);
