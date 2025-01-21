@@ -20,25 +20,26 @@ app.get('/hello', (req, res) => {
 })
 
 app.post('/blog', (req, res) => {
-    const {author, subject, publishDate, blog} = req.body;
+    const {author, subject, blog, publish, publishDate } = req.body;
     const id = subject.replace(' ', '-');
 
-    if (!author || !subject || !publishDate || !blog) {
+    if (!author || !subject || !blog || !publish || !publishDate) {
         return res.sendStatus(400)
     }res.sendStatus(201)
 
-    // const newObject = {
-    //     id: id,
-    //     author: author,
-    //     subject: subject,
-    //     publishDate: publishDate,
-    //     blog: blog,
-    //
-    // };
+    const newBlog = {
+        id: id,
+        author: author,
+        subject: subject,
+        blog: blog,
+        publish: publish,
+        publishDate: publishDate,
+
+    };
 
 
     fs.writeFile(`./blog-${id}.HTML`,
-        `<h1> Author: ${author} </h1> <h2> Supject: ${subject} </h2> <h2> Blog: ${blog} </h2> <p> Published On: ${publishDate} </p>`, err => {
+        `<h1> Author: ${newBlog.author} </h1> <h2> Supject: ${newBlog.subject} </h2> <h2> Blog: ${newBlog.blog} </h2> <p> Published On: ${newBlog.publishDate} </p>`, err => {
         if (err) {
             console.log(err);
         } else {
