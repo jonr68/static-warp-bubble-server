@@ -36,7 +36,7 @@ app.post('/blog', (req, res) => {
         publishDate: publishDate,
 
     };
-
+//push
 
     fs.writeFile(`./blog-${id}.HTML`,
         `<h1> Author: ${newBlog.author} </h1> <h2> Supject: ${newBlog.subject} </h2> <h2> Blog: ${newBlog.blog} </h2> <p> Published On: ${newBlog.publishDate} </p>`, err => {
