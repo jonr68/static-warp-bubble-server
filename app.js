@@ -8,11 +8,10 @@ const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 
 const app = express();
-const {v4:uuid} = require('uuid');
 
 app.use(logger('dev'));
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({extended: false}));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.get('/hello', (req, res) => {
@@ -20,12 +19,13 @@ app.get('/hello', (req, res) => {
 })
 
 app.post('/blog', (req, res) => {
-    const {author, subject, blog, publish, publishDate } = req.body;
+    const {author, subject, blog, publish, publishDate} = req.body;
     const id = subject.replace(' ', '-');
 
     if (!author || !subject || !blog || !publish || !publishDate) {
         return res.sendStatus(400)
-    }res.sendStatus(201)
+    }
+    res.sendStatus(201)
 
     const newBlog = {
         id: id,
@@ -40,12 +40,12 @@ app.post('/blog', (req, res) => {
 
     fs.writeFile(`./blog-${id}.HTML`,
         `<h1> Author: ${newBlog.author} </h1> <h2> Supject: ${newBlog.subject} </h2> <h2> Blog: ${newBlog.blog} </h2> <p> Published On: ${newBlog.publishDate} </p>`, err => {
-        if (err) {
-            console.log(err);
-        } else {
-            console.log('file created');
-        }
-    });
+            if (err) {
+                console.log(err);
+            } else {
+                console.log('file created');
+            }
+        });
 
 });
 
