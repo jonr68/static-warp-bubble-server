@@ -14,9 +14,25 @@ app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-app.get('/hello', (req, res) => {
-    res.send('Hello World!')
-})
+// app.get('/hello', (req, res) => {
+//     res.send('Hello World!')
+// })
+
+app.get('/blog', (req, res) => {
+  const fileName = req.body;
+  if (!fileName) {
+    return res.sendStatus(400)
+  }
+  console.log(fileName.fileName);
+  const file = fs.readFile(`/home/jonathan/javascript projects/backend projects/static-warp-bubble-server/${fileName.fileName}`, 'utf8', (err, data) => {
+    if (err) {
+      console.error('An error occurred:', err);
+      return;
+    }
+    console.log('File content:', data);
+  });
+});
+
 
 app.post('/blog', (req, res) => {
     const {author, subject, blog, publish, publishDate} = req.body;
@@ -36,7 +52,6 @@ app.post('/blog', (req, res) => {
         publishDate: publishDate,
 
     };
-//push
 
     fs.writeFile(`./blog-${id}.HTML`,
         `<h1> Author: ${newBlog.author} </h1> <h2> Supject: ${newBlog.subject} </h2> <h2> Blog: ${newBlog.blog} </h2> <p> Published On: ${newBlog.publishDate} </p>`, err => {
