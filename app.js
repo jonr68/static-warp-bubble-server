@@ -29,7 +29,14 @@ app.get('/blog', (req, res) => {
       console.error('An error occurred:', err);
       return;
     }
-    console.log('File content:', data);
+    console.log('File content:', typeof data);
+    const removeTags = data.replaceAll(/<[^>]+>/g, '"');
+    const addFirstQuotes = removeTags.replaceAll("(\\w+)", "\"$1\"");
+    const addSecondQuotes = addFirstQuotes.replaceAll(':' , '" : "');
+    const addComma = addSecondQuotes.replaceAll('" "', '" , "');
+    const bracedText = "{" + addComma + "}";
+    const jsonObject = JSON.parse(bracedText);
+    console.log('output: ' + JSON.stringify(jsonObject));
   });
 });
 
