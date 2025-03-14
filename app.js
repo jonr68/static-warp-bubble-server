@@ -23,32 +23,30 @@ app.get('/blog', (req, res) => {
   if (!fileName) {
     return res.sendStatus(400)
   }
-  console.log(fileName.fileName);
-  const file = fs.readFile(`/home/jonathan/javascript projects/backend projects/static-warp-bubble-server/${fileName.fileName}`, 'utf8', (err, data) => {
+   fs.readFile(`/home/jonathan/javascript projects/backend projects/static-warp-bubble-server/${fileName.fileName}`, 'utf8', (err, data) => {
     if (err) {
       console.error('An error occurred:', err);
-      return;
+      return res.sendStatus(400);
     }
-    console.log('File content:', typeof data);
     const removeTags = data.replaceAll(/<[^>]+>/g, '"');
     const addFirstQuotes = removeTags.replaceAll("(\\w+)", "\"$1\"");
     const addSecondQuotes = addFirstQuotes.replaceAll(':' , '" : "');
-    const addComma = addSecondQuotes.replaceAll('" "', '" , "');
+    const addComma = addSecondQuotes.replaceAll('" "', '","');
     const bracedText = "{" + addComma + "}";
     const jsonObject = JSON.parse(bracedText);
-    console.log('output: ' + JSON.stringify(jsonObject));
+  return res.send(jsonObject);
   });
 });
 
 
 app.post('/blog', (req, res) => {
     const {author, subject, blog, publish, publishDate} = req.body;
-    const id = subject.replace(' ', '-');
-
     if (!author || !subject || !blog || !publish || !publishDate) {
-        return res.sendStatus(400)
+
+      return res.sendStatus(400)
     }
-    res.sendStatus(201)
+  res.sendStatus(201)
+  const id = subject.replaceAll(' ', '-');
 
     const newBlog = {
         id: id,
