@@ -77,6 +77,19 @@ app.post('/blog', (req, res) => {
 
 });
 
+app.post('/blogdelete', (req, res) => {
+  const fileName = req.body;
+  if (!fileName) {
+    return res.sendStatus(400)
+  }
+fs.unlink(`./${fileName.fileName}`, (err) => {
+  if (err) {
+    console.error(`Error deleting file: ${err}`);
+    return;
+  }
+  console.log(`File ${filePath} deleted successfully`);
+});
+
 app.listen(3000, () => {
     console.log(`Example app listening on port ${3000}`)
 })
