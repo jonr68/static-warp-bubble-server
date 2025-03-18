@@ -81,18 +81,26 @@ app.post("/blog", (req, res) => {
 });
 
 app.get("/blogdelete", (req, res) => {
-  const fileName = req.body;
+  const body = req.body;
+  const fileName = body.fileName;
   console.log(fileName);
   if (!fileName) {
     return res.sendStatus(400);
   } else {
-    fs.unlink(`./blog-${fileName}`, (err) => {
-      console.log(`${fileName} File deleted`);
+    fs.unlink(`./${fileName}`, (err) => {
+      if (err) {
+        console.log(err.message);
+      }
+      console.log(`${fileName} Deleted`);
+      return res.send(`${fileName} Was Deleted`);
     });
   }
 });
 
-app.listen(3000, (err, data) => {
+app.listen(3000, (err) => {
+  if (err) {
+    console.log(err.message);
+  }
   console.log(`Example app listening on port ${3000}`);
 });
 
@@ -100,3 +108,7 @@ app.use("/", indexRouter);
 app.use("/users", usersRouter);
 
 module.exports = app;
+
+/* json template
+ * {"author" : "Jonathan of the Rhine", "subject": "More delete testing", "blog": "Tests, tests, and more tests", "publish": "true", "publishDate": "2025-03-18" }
+ * */
