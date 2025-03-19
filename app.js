@@ -24,7 +24,7 @@ app.get("/blog", (req, res) => {
   }
   fs.readFile(`./${fileName.fileName}`, "utf8", (err, data) => {
     if (err) {
-      console.error("An error occurred:", err);
+      console.error("An error occurred:", err.message);
       return res.sendStatus(400);
     }
     //Changes HTML to JSON format
@@ -69,7 +69,7 @@ app.post("/blog", (req, res) => {
   //func to write file with HTML formatting
   fs.writeFile(
     `./blog-${id}.html`,
-    `<h1> Author: ${newBlog.author} </h1> <h2> Supject: ${newBlog.subject} </h2> <h2> Blog: ${newBlog.blog} </h2> <p> Published On: ${newBlog.publishDate} </p>`,
+    `<h1> Author: ${newBlog.author} </h1> <h2> Supject: ${newBlog.subject} </h2> <h2> Blog: ${newBlog.blog} </h2> <p> Published On: ${newBlog.publishDate} </p> <p hidden="">publish: ${publish}</p>`,
     (err) => {
       if (err) {
         console.log(err);
@@ -108,7 +108,3 @@ app.use("/", indexRouter);
 app.use("/users", usersRouter);
 
 module.exports = app;
-
-/* json template
- * {"author" : "Jonathan of the Rhine", "subject": "More delete testing", "blog": "Tests, tests, and more tests", "publish": "true", "publishDate": "2025-03-18" }
- * */
