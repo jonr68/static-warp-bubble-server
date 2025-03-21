@@ -22,7 +22,7 @@ app.get("/blog", (req, res) => {
   if (!fileName) {
     return res.sendStatus(400);
   }
-  fs.readFile(`./${fileName.fileName}`, "utf8", (err, data) => {
+  fs.readFile(`./blogs/${fileName.fileName}`, "utf8", (err, data) => {
     if (err) {
       console.error("An error occurred:", err.message);
       return res.sendStatus(400);
@@ -68,7 +68,7 @@ app.post("/blog", (req, res) => {
   };
   //func to write file with HTML formatting
   fs.writeFile(
-    `./blog-${id}.html`,
+    `./blogs/blog-${id}.html`,
     `<h1> Author: ${newBlog.author} </h1> <h2> Supject: ${newBlog.subject} </h2> <h2> Blog: ${newBlog.blog} </h2> <p> Published On: ${newBlog.publishDate} </p> <p hidden="">publish: ${publish}</p>`,
     (err) => {
       if (err) {
@@ -87,9 +87,10 @@ app.get("/blogdelete", (req, res) => {
   if (!fileName) {
     return res.sendStatus(400);
   } else {
-    fs.unlink(`./${fileName}`, (err) => {
+    fs.unlink(`./blogs/${fileName}`, (err) => {
       if (err) {
         console.log(err.message);
+        return res.send(err.message)
       }
       console.log(`${fileName} Deleted`);
       return res.send(`${fileName} Was Deleted`);
@@ -97,12 +98,11 @@ app.get("/blogdelete", (req, res) => {
   }
 });
 
-app.listen(3000, (err) => {
-  if (err) {
-    console.log(err.message);
-  }
-  console.log(`Example app listening on port ${3000}`);
-});
+
+app.listen(3000, () => {
+    console.log(`Example app listening on port ${3000}`)
+})
+
 
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
