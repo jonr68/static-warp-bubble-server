@@ -12,7 +12,7 @@ const app = express();
 app.use(logger("dev"));
 app.use(express.json());
 
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({extended: false}));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
@@ -51,7 +51,7 @@ app.get("/blog", (req, res) => {
 /*Takes blog information from frontend and injects it into HTML and saves
  file using the subject as ID*/
 app.post("/blog", (req, res) => {
-  const { author, subject, blog, publish, publishDate } = req.body;
+  const {author, subject, blog, publish, publishDate} = req.body;
   if (!author || !subject || !blog || !publish || !publishDate) {
     return res.sendStatus(400);
   }
@@ -98,9 +98,24 @@ app.get("/blogdelete", (req, res) => {
   }
 });
 
+app.get("/bloglist", (req, res) => {
+  const fileNames = [];
+  fs.readdir("./blogs", {withFileTypes: true}, (err, files) => {
+    // console.log("\nCurrent directory files:");
+    if (err) console.log(err);
+    else {
+      files.forEach((file) => {
+        fileNames.push(`www.${file.name}`);
+        // console.log(files);
+        console.log(fileNames);
+      });
+      return res.send(`${JSON.stringify(fileNames)}\n`);
+    }
+  });
+});
 
 app.listen(3000, () => {
-    console.log(`Example app listening on port ${3000}`)
+  console.log(`Example app listening on port ${3000}`)
 })
 
 
