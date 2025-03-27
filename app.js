@@ -30,7 +30,7 @@ app.get("/blog", (req, res) => {
     //Changes HTML to JSON format
     const lowercaseKeys = data
       .replace("Author", "author")
-      .replace("Supject", "subject")
+      .replace("Subject", "subject")
       .replace("Blog", "blog")
       .replace("Published On", "publishDate");
     const removeTags = lowercaseKeys.replaceAll(/<[^>]+>/g, '"');
@@ -69,7 +69,7 @@ app.post("/blog", (req, res) => {
   //func to write file with HTML formatting
   fs.writeFile(
     `./blogs/blog-${id}.html`,
-    `<h1> Author: ${newBlog.author} </h1> <h2> Supject: ${newBlog.subject} </h2> <h2> Blog: ${newBlog.blog} </h2> <p> Published On: ${newBlog.publishDate} </p> <p hidden="">publish: ${publish}</p>`,
+    `<h1> Author: ${newBlog.author} </h1> <h2> Subject: ${newBlog.subject} </h2> <h2> Blog: ${newBlog.blog} </h2> <p> Published On: ${newBlog.publishDate} </p> <p hidden="">publish: ${publish}</p>`,
     (err) => {
       if (err) {
         console.log(err);
