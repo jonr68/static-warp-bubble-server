@@ -105,7 +105,7 @@ app.get("/bloglist", (req, res) => {
     if (err) console.log(err);
     else {
       files.forEach((file) => {
-        fileNames.push(`www.${file.name}`);
+        fileNames.push(`http://localhost:3000/${file.name}`);
         // console.log(files);
         console.log(fileNames);
       });
@@ -113,6 +113,8 @@ app.get("/bloglist", (req, res) => {
     }
   });
 });
+
+app.use(express.static('./blogs/'))
 
 app.listen(3000, () => {
   console.log(`Example app listening on port ${3000}`)
