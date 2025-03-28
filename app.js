@@ -12,7 +12,7 @@ const app = express();
 app.use(logger("dev"));
 app.use(express.json());
 
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({extended: false}));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
@@ -30,7 +30,7 @@ app.get("/blog", (req, res) => {
     //Changes HTML to JSON format
     const lowercaseKeys = data
       .replace("Author", "author")
-      .replace("Supject", "subject")
+      .replace("Subject", "subject")
       .replace("Blog", "blog")
       .replace("Published On", "publishDate");
     const removeTags = lowercaseKeys.replaceAll(/<[^>]+>/g, '"');
@@ -51,12 +51,12 @@ app.get("/blog", (req, res) => {
 /*Takes blog information from frontend and injects it into HTML and saves
  file using the subject as ID*/
 app.post("/blog", (req, res) => {
-  const { author, subject, blog, publish, publishDate } = req.body;
+  const {author, subject, blog, publish, publishDate} = req.body;
   if (!author || !subject || !blog || !publish || !publishDate) {
     return res.sendStatus(400);
   }
   res.sendStatus(201);
-  const id = subject.replaceAll(" ", "-");
+  const id = publishDate + '-' + subject.replaceAll(" ", "-");
 
   const newBlog = {
     id: id,
@@ -69,7 +69,7 @@ app.post("/blog", (req, res) => {
   //func to write file with HTML formatting
   fs.writeFile(
     `./blogs/blog-${id}.html`,
-    `<h1> Author: ${newBlog.author} </h1> <h2> Supject: ${newBlog.subject} </h2> <h2> Blog: ${newBlog.blog} </h2> <p> Published On: ${newBlog.publishDate} </p> <p hidden="">publish: ${publish}</p>`,
+    `<h1> Author: ${newBlog.author} </h1> <h2> Subject: ${newBlog.subject} </h2> <h2> Blog: ${newBlog.blog} </h2> <p> Published On: ${newBlog.publishDate} </p> <p hidden="">publish: ${publish}</p>`,
     (err) => {
       if (err) {
         console.log(err);
@@ -80,10 +80,10 @@ app.post("/blog", (req, res) => {
   );
 });
 
+//get function to delee blog files by fileName
 app.get("/blogdelete", (req, res) => {
   const body = req.body;
   const fileName = body.fileName;
-  console.log(fileName);
   if (!fileName) {
     return res.sendStatus(400);
   } else {
@@ -92,15 +92,30 @@ app.get("/blogdelete", (req, res) => {
         console.log(err.message);
         return res.send(err.message)
       }
-      console.log(`${fileName} Deleted`);
       return res.send(`${fileName} Was Deleted`);
     });
   }
 });
 
+//Returns a list of blog files as links
+app.get("/bloglist", (req, res) => {
+  const fileNames = [];
+  fs.readdir("./blogs", {withFileTypes: true}, (err, files) => {
+    if (err) console.log(err);
+    else {
+      files.forEach((file) => {
+        fileNames.push(`http://localhost:3000/${file.name}`);
+      });
+      const orderedFileNames = fileNames.reverse()
+      return res.send(`${JSON.stringify(orderedFileNames)}\n`);
+    }
+  });
+});
+
+app.use(express.static('./blogs/'))
 
 app.listen(3000, () => {
-    console.log(`Example app listening on port ${3000}`)
+  console.log(`Example app listening on port ${3000}`)
 })
 
 
