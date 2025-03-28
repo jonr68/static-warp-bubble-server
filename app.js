@@ -56,7 +56,7 @@ app.post("/blog", (req, res) => {
     return res.sendStatus(400);
   }
   res.sendStatus(201);
-  const id = subject.replaceAll(" ", "-");
+  const id = publishDate + '-' + subject.replaceAll(" ", "-");
 
   const newBlog = {
     id: id,
@@ -106,7 +106,8 @@ app.get("/bloglist", (req, res) => {
       files.forEach((file) => {
         fileNames.push(`http://localhost:3000/${file.name}`);
       });
-      return res.send(`${JSON.stringify(fileNames)}\n`);
+      const orderedFileNames = fileNames.reverse()
+      return res.send(`${JSON.stringify(orderedFileNames)}\n`);
     }
   });
 });
