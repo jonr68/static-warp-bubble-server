@@ -5,15 +5,21 @@
     <title>Blogs</title>
 </head>
 <body>
-<h1> Blogs </h1>
+    <h1> Blogs </h1>
 
-<script>
-    fetch("http://localhost:3000/bloglist")
-        .then(res => {
-            const blogs = res.json()
-            console.log(blogs)
-        })
-        .catch(error => console.log(error))
-</script>
+    <ul>
+
+    </ul>
+    <script>
+        const listEl =  document.querySelector('ul');
+        fetch("http://localhost:3000/bloglist")
+            .then(res => res.json())
+            .then(data => {
+                data.forEach(blog => {
+                    listEl.insertAdjacentHTML('beforeend', `<li>${blog.title}</li>`);
+                    })
+            });
+
+    </script>
 </body>
 </html>
