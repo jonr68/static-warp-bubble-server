@@ -6,6 +6,7 @@ const logger = require("morgan");
 
 const indexRouter = require("./routes/index");
 const usersRouter = require("./routes/users");
+// const {stringify} = require("uuid");
 
 const app = express();
 
@@ -107,7 +108,9 @@ app.get("/bloglist", (req, res) => {
         fileNames.push(`http://localhost:3000/${file.name}`);
       });
       const orderedFileNames = fileNames.reverse()
-      return res.send(`${JSON.stringify(orderedFileNames)}\n`);
+      const jsonList = JSON.stringify(orderedFileNames);
+      console.log(jsonList)
+      return res.send({jsonList});
     }
   });
 });
