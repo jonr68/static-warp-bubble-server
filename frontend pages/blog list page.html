@@ -15,8 +15,9 @@
         fetch("http://localhost:3000/bloglist")
             .then(res => res.json())
             .then(data => {
+                console.log(data)
                 data.forEach(blog => {
-                    listEl.insertAdjacentHTML('beforeend', `<li>${blog.title}</li>`);
+                    listEl.insertAdjacentHTML('beforeend', `<li>${blog}</li>`);
                     })
             });
 

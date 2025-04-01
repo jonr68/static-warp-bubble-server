@@ -3,6 +3,7 @@ const express = require("express");
 const path = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
+const cors = require("cors");
 
 const indexRouter = require("./routes/index");
 const usersRouter = require("./routes/users");
@@ -12,8 +13,8 @@ const app = express();
 
 app.use(logger("dev"));
 app.use(express.json());
-
-app.use(express.urlencoded({extended: false}));
+app.use(cors());
+app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
@@ -52,12 +53,12 @@ app.get("/blog", (req, res) => {
 /*Takes blog information from frontend and injects it into HTML and saves
  file using the subject as ID*/
 app.post("/blog", (req, res) => {
-  const {author, subject, blog, publish, publishDate} = req.body;
+  const { author, subject, blog, publish, publishDate } = req.body;
   if (!author || !subject || !blog || !publish || !publishDate) {
     return res.sendStatus(400);
   }
   res.sendStatus(201);
-  const id = publishDate + '-' + subject.replaceAll(" ", "-");
+  const id = publishDate + "-" + subject.replaceAll(" ", "-");
 
   const newBlog = {
     id: id,
@@ -91,7 +92,7 @@ app.get("/blogdelete", (req, res) => {
     fs.unlink(`./blogs/${fileName}`, (err) => {
       if (err) {
         console.log(err.message);
-        return res.send(err.message)
+        return res.send(err.message);
       }
       return res.send(`${fileName} Was Deleted`);
     });
@@ -101,26 +102,24 @@ app.get("/blogdelete", (req, res) => {
 //Returns a list of blog files as links
 app.get("/bloglist", (req, res) => {
   const fileNames = [];
-  fs.readdir("./blogs", {withFileTypes: true}, (err, files) => {
+  fs.readdir("./blogs", { withFileTypes: true }, (err, files) => {
     if (err) console.log(err);
     else {
       files.forEach((file) => {
         fileNames.push(`http://localhost:3000/${file.name}`);
       });
-      const orderedFileNames = fileNames.reverse()
-      const jsonList = JSON.stringify(orderedFileNames);
-      console.log(jsonList)
-      return res.send({jsonList});
+      const orderedFileNames = fileNames.reverse();
+      const jsonObject = JSON.stringify(orderedFileNames);
+      return res.send(jsonObject);
     }
   });
 });
 
-app.use(express.static('./blogs/'))
+app.use(express.static("./blogs/"));
 
 app.listen(3000, () => {
-  console.log(`Example app listening on port ${3000}`)
-})
-
+  console.log(`Example app listening on port ${3000}`);
+});
 
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
