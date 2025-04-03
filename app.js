@@ -77,6 +77,7 @@ app.post("/blog", (req, res) => {
         console.log(err);
       } else {
         console.log("file created");
+        makeBlogList()
       }
     },
   );
@@ -100,7 +101,22 @@ app.get("/blogdelete", (req, res) => {
 });
 
 //Returns a list of blog files as links
-app.get("/bloglist", (req, res) => {
+// app.get("/bloglist", (req, res) => {
+//   const fileNames = [];
+//   fs.readdir("./blogs", { withFileTypes: true }, (err, files) => {
+//     if (err) console.log(err);
+//     else {
+//       files.forEach((file) => {
+//         fileNames.push(`http://localhost:3000/${file.name}`);
+//       });
+//       const orderedFileNames = fileNames.reverse();
+//       const jsonObject = JSON.stringify(orderedFileNames);
+//       return res.send(jsonObject);
+//     }
+//   });
+// });
+
+const makeBlogList = () => {
   const fileNames = [];
   fs.readdir("./blogs", { withFileTypes: true }, (err, files) => {
     if (err) console.log(err);
@@ -108,12 +124,23 @@ app.get("/bloglist", (req, res) => {
       files.forEach((file) => {
         fileNames.push(`http://localhost:3000/${file.name}`);
       });
-      const orderedFileNames = fileNames.reverse();
-      const jsonObject = JSON.stringify(orderedFileNames);
-      return res.send(jsonObject);
+      return fileNames.reverse();
     }
   });
-});
+  fs.writeFile(
+    `./blogs/bloglist.html`,
+    `<h1> Blogs </h1> <h2> placw blogs here ${fileNames} </h2> `,
+    (err) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log("file created");
+      }
+    },
+  );
+
+    
+}
 
 app.use(express.static("./blogs/"));
 
