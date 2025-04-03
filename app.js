@@ -134,7 +134,7 @@ const makeBlogList = () => {
       if (err) {
         console.log(err);
       } else {
-        console.log("file created");
+        console.log("file created");//k
       }
     },
   );
