@@ -123,7 +123,7 @@ const makeBlogList = () => {
     else {
       files.forEach((file) => {
         fileNames.push(`http://localhost:3000/${file.name}`);
-        console.log(fileNames);
+        // console.log(fileNames);
       });
 
     }
@@ -145,20 +145,18 @@ const makeBlogList = () => {
     <title>Blogs</title>
 </head>
 <body>
-    <h1> Blogs D</h1>
+    <h1> Blogs </h1>
 
-    <ul>
-
-    </ul>
+    <ul id="myList"></ul>
     <script>
-        const listEl =  document.querySelector('ul');
-        ${fileNames?.forEach(blog => {
-    // const regex = "(?:blog-)?//d{4}-//d{2}-//d{2}-/n/g"
-    // const blogName = blog.replaceAll("http://localhost:3000/", '').replaceAll(".html", '').replaceAll(/\d{4}-\d{2}-\d{2}-/g, "").replaceAll("blog-", "");
-    listEl.insertAdjacentHTML('beforeend', `<li> <a href="${blog}" target="_blank"> ${blog} </a> </li>`);
-  })}
-            
-
+    let data = ["Ram", "Shyam", "Sita", "Gita"];
+        let list = document.getElementById("myList");
+        for (i = 0; i < data.length; ++i) {
+            let li = document.createElement('li');
+            li.innerText = data[i];
+            list.appendChild(li);
+        }
+  
     </script>
 </body>
 </html>
