@@ -7,6 +7,7 @@ const cors = require("cors");
 
 const indexRouter = require("./routes/index");
 const usersRouter = require("./routes/users");
+const res = require("express/lib/response");
 // const {stringify} = require("uuid");
 
 const app = express();
@@ -117,62 +118,31 @@ app.get("/blogdelete", (req, res) => {
 // });
 
 const makeBlogList = () => {
-  const fileNames = [];
-  fs.readdir("./blogs", { withFileTypes: true }, (err, files) => {
-    if (err) console.log(err);
-    else {
-      files.forEach((file) => {
-        fileNames.push(`http://localhost:3000/${file.name}`);
-        // console.log(fileNames);
-      });
-
+  // Read the HTML file
+  fs.readFile('./frontend pages/blog-list-page.html', 'utf8', (err, html) => {
+    if (err) {
+      res.status(500).send('Error reading the HTML file');
+      return;
     }
+
+    // Content to add
+    const newContent = '<h2>This content was added by the server and rewritten to the file.</h2>';
+
+    // Add the new content to the HTML
+    const modifiedHTML = html.replace('</body>', newContent + '</body>');
+
+    // Write the modified HTML back to the file
+    fs.writeFile('./frontend pages/blog-list-page.html', modifiedHTML, (err) => {
+      if (err) {
+        res.status(500).send('Error writing the HTML file');
+        return;
+      }
+
+      console.log('HTML file updated.');
+
+    });
   });
 
-  // const jsCode = function fileContent()   {
-  //   fileNames.forEach(blog => {
-  //     const regex = "(?:blog-)?//d{4}-//d{2}-//d{2}-/n/g"
-  //     const blogName = blog.replaceAll("http://localhost:3000/", '').replaceAll(".html", '').replaceAll(/\d{4}-\d{2}-\d{2}-/g, "").replaceAll("blog-", "");
-  //     console.log(blogName);
-  //     listEl.insertAdjacentHTML('beforeend', `<li> <a href="${blog}" target="_blank"> ${blogName} </a> </li>`);
-  //   })
-  // }
-
-  const html = `<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Blogs</title>
-</head>
-<body>
-    <h1> Blogs </h1>
-
-    <ul id="myList"></ul>
-    <script>
-    let data = ["Ram", "Shyam", "Sita", "Gita"];
-        let list = document.getElementById("myList");
-        for (i = 0; i < data.length; ++i) {
-            let li = document.createElement('li');
-            li.innerText = data[i];
-            list.appendChild(li);
-        }
-  
-    </script>
-</body>
-</html>
-
-`
-  fs.writeFile(
-    `./blogs/bloglist.html`,
-    html,
-    (err) => {
-      if (err) {
-        console.log(err);
-      } else {
-        console.log("file created");//k
-      }
-    },
-  );
 
 
 }
