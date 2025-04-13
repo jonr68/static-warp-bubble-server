@@ -78,10 +78,36 @@ app.post("/blog", (req, res) => {
         console.log(err);
       } else {
         console.log("file created");
-        makeBlogList()
+        // makeBlogList()
       }
     },
   );
+
+  // Read the HTML file
+  fs.readFile('./frontend pages/blog-list-page.html', 'utf8', (err, html) => {
+    if (err) {
+      res.status(500).send('Error reading the HTML file');
+      return;
+    }
+
+    // Content to add
+    const newContent = `<h2> ${newBlog.subject} </h2>`;
+
+    // Add the new content to the HTML
+    const modifiedHTML = html + newContent
+
+    // Write the modified HTML back to the file
+    fs.writeFile('./frontend pages/blog-list-page.html', modifiedHTML, (err) => {
+      if (err) {
+        res.status(500).send('Error writing the HTML file');
+        return;
+      }
+
+      console.log('HTML file updated.');
+
+    });
+  });
+
 });
 
 //get function to delee blog files by fileName
