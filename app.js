@@ -129,7 +129,7 @@ const makeBlogList = () => {
     const newContent = '<h2>This content was added by the server and rewritten to the file.</h2>';
 
     // Add the new content to the HTML
-    const modifiedHTML = html.replace('</body>', newContent + '</body>');
+    const modifiedHTML = html + newContent
 
     // Write the modified HTML back to the file
     fs.writeFile('./frontend pages/blog-list-page.html', modifiedHTML, (err) => {
