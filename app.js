@@ -59,7 +59,7 @@ app.post("/blog", (req, res) => {
     return res.sendStatus(400);
   }
   res.sendStatus(201);
-  const id = publishDate + "-" + subject.replaceAll(" ", "-");
+  const id = publishDate + "-" + subject.replaceAll(" ", "-").replaceAll(/[!@#$%^&*?]/g,'');
 
   const newBlog = {
     id: id,
@@ -91,7 +91,7 @@ app.post("/blog", (req, res) => {
     }
 
     // Content to add
-    const newContent = `<h2> ${newBlog.subject} </h2>`;
+    const newContent = `<h2> <a href='http://localhost:3000/blog-${newBlog.id}.html'>${newBlog.subject} </a></h2>`;
 
     // Add the new content to the HTML
     const modifiedHTML = html + newContent
