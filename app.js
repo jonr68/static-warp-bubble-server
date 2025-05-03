@@ -94,18 +94,19 @@ app.post("/blog", (req, res) => {
     const newContent = `<h2> <a href='http://localhost:3000/blog-${newBlog.id}.html'>${newBlog.subject} </a></h2>`;
 
     // Add the new content to the HTML
-    const modifiedHTML = html + newContent
+    if (html.includes(newContent)) {
+      return;
+    } else {
+      const modifiedHTML = html + newContent
+      // Write the modified HTML back to the file
+      fs.writeFile('./frontend pages/blog-list-page.html', modifiedHTML, (err) => {
+        if (err) {
+          res.status(500).send('Error writing the HTML file');
+          return;
+        }
+        console.log('HTML file updated.');
 
-    // Write the modified HTML back to the file
-    fs.writeFile('./frontend pages/blog-list-page.html', modifiedHTML, (err) => {
-      if (err) {
-        res.status(500).send('Error writing the HTML file');
-        return;
-      }
-
-      console.log('HTML file updated.');
-
-    });
+    })}
   });
 
 });
@@ -143,35 +144,35 @@ app.get("/blogdelete", (req, res) => {
 //   });
 // });
 
-const makeBlogList = () => {
-  // Read the HTML file
-  fs.readFile('./frontend pages/blog-list-page.html', 'utf8', (err, html) => {
-    if (err) {
-      res.status(500).send('Error reading the HTML file');
-      return;
-    }
-
-    // Content to add
-    const newContent = '<h2>This content was added by the server and rewritten to the file.</h2>';
-
-    // Add the new content to the HTML
-    const modifiedHTML = html + newContent
-
-    // Write the modified HTML back to the file
-    fs.writeFile('./frontend pages/blog-list-page.html', modifiedHTML, (err) => {
-      if (err) {
-        res.status(500).send('Error writing the HTML file');
-        return;
-      }
-
-      console.log('HTML file updated.');
-
-    });
-  });
-
-
-
-}
+// const makeBlogList = () => {
+//   // Read the HTML file
+//   fs.readFile('./frontend pages/blog-list-page.html', 'utf8', (err, html) => {
+//     if (err) {
+//       res.status(500).send('Error reading the HTML file');
+//       return;
+//     }
+//
+//     // Content to add
+//     const newContent = '<h2>This content was added by the server and rewritten to the file.</h2>';
+//
+//     // Add the new content to the HTML
+//     const modifiedHTML = html + newContent
+//
+//     // Write the modified HTML back to the file
+//     fs.writeFile('./frontend pages/blog-list-page.html', modifiedHTML, (err) => {
+//       if (err) {
+//         res.status(500).send('Error writing the HTML file');
+//         return;
+//       }
+//
+//       console.log('HTML file updated.');
+//
+//     });
+//   });
+//
+//
+//
+// }
 
 app.use(express.static("./blogs/"));
 
