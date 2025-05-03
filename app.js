@@ -7,7 +7,7 @@ const cors = require("cors");
 
 const indexRouter = require("./routes/index");
 const usersRouter = require("./routes/users");
-const res = require("express/lib/response");
+// const res = require("express/lib/response");
 // const {stringify} = require("uuid");
 
 const app = express();
@@ -95,7 +95,7 @@ app.post("/blog", (req, res) => {
 
     // Add the new content to the HTML
     if (html.includes(newContent)) {
-      return;
+
     } else {
       const modifiedHTML = html + newContent
       // Write the modified HTML back to the file
@@ -144,7 +144,7 @@ app.get("/blogdelete", (req, res) => {
 //   });
 // });
 
-// const makeBlogList = () => {
+// const makesBlogList = () => {
 //   // Read the HTML file
 //   fs.readFile('./frontend pages/blog-list-page.html', 'utf8', (err, html) => {
 //     if (err) {
