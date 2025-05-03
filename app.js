@@ -7,15 +7,13 @@ const cors = require("cors");
 
 const indexRouter = require("./routes/index");
 const usersRouter = require("./routes/users");
-// const res = require("express/lib/response");
-// const {stringify} = require("uuid");
 
 const app = express();
 
 app.use(logger("dev"));
 app.use(express.json());
 app.use(cors());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({extended: false}));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
@@ -54,12 +52,12 @@ app.get("/blog", (req, res) => {
 /*Takes blog information from frontend and injects it into HTML and saves
  file using the subject as ID*/
 app.post("/blog", (req, res) => {
-  const { author, subject, blog, publish, publishDate } = req.body;
+  const {author, subject, blog, publish, publishDate} = req.body;
   if (!author || !subject || !blog || !publish || !publishDate) {
     return res.sendStatus(400);
   }
   res.sendStatus(201);
-  const id = publishDate + "-" + subject.replaceAll(" ", "-").replaceAll(/[!@#$%^&*?]/g,'');
+  const id = publishDate + "-" + subject.replaceAll(" ", "-").replaceAll(/[!@#$%^&*?]/g, '');
 
   const newBlog = {
     id: id,
@@ -78,7 +76,6 @@ app.post("/blog", (req, res) => {
         console.log(err);
       } else {
         console.log("file created");
-        // makeBlogList()
       }
     },
   );
@@ -106,7 +103,8 @@ app.post("/blog", (req, res) => {
         }
         console.log('HTML file updated.');
 
-    })}
+      })
+    }
   });
 
 });
@@ -128,51 +126,6 @@ app.get("/blogdelete", (req, res) => {
   }
 });
 
-//Returns a list of blog files as links
-// app.get("/bloglist", (req, res) => {
-//   const fileNames = [];
-//   fs.readdir("./blogs", { withFileTypes: true }, (err, files) => {
-//     if (err) console.log(err);
-//     else {
-//       files.forEach((file) => {
-//         fileNames.push(`http://localhost:3000/${file.name}`);
-//       });
-//       const orderedFileNames = fileNames.reverse();
-//       const jsonObject = JSON.stringify(orderedFileNames);
-//       return res.send(jsonObject);
-//     }
-//   });
-// });
-
-// const makesBlogList = () => {
-//   // Read the HTML file
-//   fs.readFile('./frontend pages/blog-list-page.html', 'utf8', (err, html) => {
-//     if (err) {
-//       res.status(500).send('Error reading the HTML file');
-//       return;
-//     }
-//
-//     // Content to add
-//     const newContent = '<h2>This content was added by the server and rewritten to the file.</h2>';
-//
-//     // Add the new content to the HTML
-//     const modifiedHTML = html + newContent
-//
-//     // Write the modified HTML back to the file
-//     fs.writeFile('./frontend pages/blog-list-page.html', modifiedHTML, (err) => {
-//       if (err) {
-//         res.status(500).send('Error writing the HTML file');
-//         return;
-//       }
-//
-//       console.log('HTML file updated.');
-//
-//     });
-//   });
-//
-//
-//
-// }
 
 app.use(express.static("./blogs/"));
 
