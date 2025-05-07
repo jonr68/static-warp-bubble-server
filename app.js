@@ -91,9 +91,7 @@ app.post("/blog", (req, res) => {
     const newContent = `<h2> <a href='http://localhost:3000/blog-${newBlog.id}.html'>${newBlog.subject} </a></h2>`;
 
     // Add the new content to the HTML
-    if (html.includes(newContent)) {
-
-    } else {
+    if (!html.includes(newContent)) {
       const modifiedHTML = html + newContent
       // Write the modified HTML back to the file
       fs.writeFile('./frontend pages/blog-list-page.html', modifiedHTML, (err) => {
