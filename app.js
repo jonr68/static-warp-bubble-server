@@ -122,6 +122,8 @@ app.get("/blogdelete", (req, res) => {
       return res.send(`${fileName} Was Deleted`);
     });
   }
+
+  // removes from blog list page after deletion
 });
 
 
