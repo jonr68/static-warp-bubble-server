@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Blogs</title>
+</head>
+<body>
+    <h1> Blogs </h1>
+
+    <ul id="myList"></ul>
+    <script>
+    let data = {fileNames}
+        let list = document.getElementById("myList");
+        for (i = 0; i < data.length; ++i) {
+            let li = document.createElement('li');
+            li.innerText = data[i];
+            list.appendChild(li);
+        }
+  
+    </script>
+</body>
+</html>
+

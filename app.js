@@ -3,6 +3,7 @@ const express = require("express");
 const path = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
+const cors = require("cors");
 
 const indexRouter = require("./routes/index");
 const usersRouter = require("./routes/users");
@@ -11,7 +12,7 @@ const app = express();
 
 app.use(logger("dev"));
 app.use(express.json());
-
+app.use(cors());
 app.use(express.urlencoded({extended: false}));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
@@ -56,7 +57,7 @@ app.post("/blog", (req, res) => {
     return res.sendStatus(400);
   }
   res.sendStatus(201);
-  const id = publishDate + '-' + subject.replaceAll(" ", "-");
+  const id = publishDate + "-" + subject.replaceAll(" ", "-").replaceAll(/[!@#$%^&*?]/g, '');
 
   const newBlog = {
     id: id,
@@ -78,6 +79,32 @@ app.post("/blog", (req, res) => {
       }
     },
   );
+
+  // Read the HTML file
+  fs.readFile('./frontend pages/blog-list-page.html', 'utf8', (err, html) => {
+    if (err) {
+      res.status(500).send('Error reading the HTML file');
+      return;
+    }
+
+    // Content to add
+    const newContent = `<h2> <a href='http://localhost:3000/blog-${newBlog.id}.html'>${newBlog.subject} </a></h2>`;
+
+    // Add the new content to the HTML
+    if (!html.includes(newContent)) {
+      const modifiedHTML = html + newContent
+      // Write the modified HTML back to the file
+      fs.writeFile('./frontend pages/blog-list-page.html', modifiedHTML, (err) => {
+        if (err) {
+          res.status(500).send('Error writing the HTML file');
+          return;
+        }
+        console.log('HTML file updated.');
+
+      })
+    }
+  });
+
 });
 
 //get function to delee blog files by fileName
@@ -90,34 +117,19 @@ app.get("/blogdelete", (req, res) => {
     fs.unlink(`./blogs/${fileName}`, (err) => {
       if (err) {
         console.log(err.message);
-        return res.send(err.message)
+        return res.send(err.message);
       }
       return res.send(`${fileName} Was Deleted`);
     });
   }
 });
 
-//Returns a list of blog files as links
-app.get("/bloglist", (req, res) => {
-  const fileNames = [];
-  fs.readdir("./blogs", {withFileTypes: true}, (err, files) => {
-    if (err) console.log(err);
-    else {
-      files.forEach((file) => {
-        fileNames.push(`http://localhost:3000/${file.name}`);
-      });
-      const orderedFileNames = fileNames.reverse()
-      return res.send(`${JSON.stringify(orderedFileNames)}\n`);
-    }
-  });
-});
 
-app.use(express.static('./blogs/'))
+app.use(express.static("./blogs/"));
 
 app.listen(3000, () => {
-  console.log(`Example app listening on port ${3000}`)
-})
-
+  console.log(`Example app listening on port ${3000}`);
+});
 
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
