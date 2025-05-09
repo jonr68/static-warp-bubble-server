@@ -141,7 +141,7 @@ app.get("/blogdelete", (req, res) => {
 
 
   }
-
+//
   // removes from blog list page after deletion
   // Read the HTML file
 
