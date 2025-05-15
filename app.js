@@ -98,21 +98,23 @@ app.post("/blog", (req, res) => {
 
 });
 
-//get function to delete blog files by fileName
+//removes blog file from dir and link from list page
+//get request for filename and blog subject
 app.get("/blogdelete", (req, res) => {
   const body = req.body;
   const fileName = body.fileName;
   const subject = body.subject;
+  //Checks that file name and subject weresent
   if (!fileName || !subject) {
     return res.sendStatus(400);
   } else {
     fs.readFile('./frontend pages/blog-list-page.html', 'utf8', (err, html) => {
       if (err) {
-        res.status(500).send('Error reading the HTML file');
+        res.status(500).send('Error reading the HTML file or blog subject');
         return;
       }
 
-      // Content to remove
+      // removes link from list page
       const blogToRemove = `<h2> <a href='http://localhost:3000/${fileName}'>${subject} </a></h2>`;
       console.log(blogToRemove);
       // Add the new content to the HTML
@@ -127,6 +129,7 @@ app.get("/blogdelete", (req, res) => {
           console.log('HTML file updated.');
 
         })
+        //deletes file from blogs directory
         fs.unlink(`./blogs/${fileName}`, (err) => {
           if (err) {
             console.log(err.message);
@@ -141,9 +144,7 @@ app.get("/blogdelete", (req, res) => {
 
 
   }
-//
-  // removes from blog list page after deletion
-  // Read the HTML file
+
 
 });
 
