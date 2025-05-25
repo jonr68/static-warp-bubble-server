@@ -99,8 +99,8 @@ app.post("/blog", (req, res) => {
 });
 
 //removes blog file from dir and link from list page
-//get request for filename and blog subject
-app.get("/blogdelete", (req, res) => {
+//delete request for filename and blog subject
+app.delete("/blogdelete", (req, res) => {
   const body = req.body;
   const fileName = body.fileName;
   const subject = body.subject;
