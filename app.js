@@ -106,7 +106,7 @@ app.delete("/blogdelete", (req, res) => {
   const subject = body.subject;
   //Checks that file name and subject weresent
   if (!fileName || !subject) {
-    return res.sendStatus(400);
+    return res.status(400).send('Missing fileName or subject');
   } else {
     fs.readFile('./frontend pages/blog-list-page.html', 'utf8', (err, html) => {
       if (err) {
