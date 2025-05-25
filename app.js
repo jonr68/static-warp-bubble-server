@@ -60,25 +60,16 @@ app.post("/blog", (req, res) => {
   const id = publishDate + "-" + subject.replaceAll(" ", "-").replaceAll(/[!@#$%^&*?]/g, '');
 
   const newBlog = {
-    id: id,
-    author: author,
-    subject: subject,
-    blog: blog,
-    publish: publish,
-    publishDate: publishDate,
+    id: id, author: author, subject: subject, blog: blog, publish: publish, publishDate: publishDate,
   };
   //func to write file with HTML formatting
-  fs.writeFile(
-    `./blogs/blog-${id}.html`,
-    `<h1> Author: ${newBlog.author} </h1> <h2> Subject: ${newBlog.subject} </h2> <h2> Blog: ${newBlog.blog} </h2> <p> Published On: ${newBlog.publishDate} </p> <p hidden="">publish: ${publish}</p>`,
-    (err) => {
-      if (err) {
-        console.log(err);
-      } else {
-        console.log("file created");
-      }
-    },
-  );
+  fs.writeFile(`./blogs/blog-${id}.html`, `<h1> Author: ${newBlog.author} </h1> <h2> Subject: ${newBlog.subject} </h2> <h2> Blog: ${newBlog.blog} </h2> <p> Published On: ${newBlog.publishDate} </p> <p hidden="">publish: ${publish}</p>`, (err) => {
+    if (err) {
+      console.log(err);
+    } else {
+      console.log("file created");
+    }
+  },);
 
   // Read the HTML file
   fs.readFile('./frontend pages/blog-list-page.html', 'utf8', (err, html) => {
@@ -107,21 +98,54 @@ app.post("/blog", (req, res) => {
 
 });
 
-//get function to delee blog files by fileName
-app.get("/blogdelete", (req, res) => {
+//removes blog file from dir and link from list page
+//delete request for filename and blog subject
+app.delete("/blog", (req, res) => {
   const body = req.body;
   const fileName = body.fileName;
-  if (!fileName) {
-    return res.sendStatus(400);
+  const subject = body.subject;
+  //Checks that file name and subject weresent
+  if (!fileName || !subject) {
+    return res.status(400).send('Missing fileName or subject');
   } else {
-    fs.unlink(`./blogs/${fileName}`, (err) => {
+    fs.readFile('./frontend pages/blog-list-page.html', 'utf8', (err, html) => {
       if (err) {
-        console.log(err.message);
-        return res.send(err.message);
+        res.status(500).send('Error reading the HTML file or blog subject');
+        return;
       }
-      return res.send(`${fileName} Was Deleted`);
+
+      // removes link from list page
+      const blogToRemove = `<h2> <a href='http://localhost:3000/${fileName}'>${subject} </a></h2>`;
+      console.log(blogToRemove);
+      // Add the new content to the HTML
+      if (html.includes(blogToRemove)) {
+        const modifiedHTML = html.replace(blogToRemove, "");
+        // Write the modified HTML back to the file
+        fs.writeFile('./frontend pages/blog-list-page.html', modifiedHTML, (err) => {
+          if (err) {
+            res.status(500).send('Error writing the HTML file');
+            return;
+          }
+          console.log('HTML file updated.');
+
+        })
+        //deletes file from blogs directory
+        fs.unlink(`./blogs/${fileName}`, (err) => {
+          if (err) {
+            console.log(err.message);
+            return res.send(err.message);
+          }
+          return res.send(`${fileName} Was Deleted`);
+        });
+      } else {
+        return res.sendStatus(400);
+      }
     });
+
+
   }
+
+
 });
 
 
