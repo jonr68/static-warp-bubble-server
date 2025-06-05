@@ -63,6 +63,7 @@ app.post("/blog", (req, res) => {
     id: id, author: author, subject: subject, blog: blog, publish: publish, publishDate: publishDate,
   };
   //func to write file with HTML formatting
+  const html = ''
   fs.writeFile(`./blogs/blog-${id}.html`, `<h1> Author: ${newBlog.author} </h1> <h2> Subject: ${newBlog.subject} </h2> <h2> Blog: ${newBlog.blog} </h2> <p> Published On: ${newBlog.publishDate} </p> <p hidden="">publish: ${publish}</p>`, (err) => {
     if (err) {
       console.log(err);
