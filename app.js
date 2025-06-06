@@ -63,8 +63,68 @@ app.post("/blog", (req, res) => {
     id: id, author: author, subject: subject, blog: blog, publish: publish, publishDate: publishDate,
   };
   //func to write file with HTML formatting
-  const html = ''
-  fs.writeFile(`./blogs/blog-${id}.html`, `<h1> Author: ${newBlog.author} </h1> <h2> Subject: ${newBlog.subject} </h2> <h2> Blog: ${newBlog.blog} </h2> <p> Published On: ${newBlog.publishDate} </p> <p hidden="">publish: ${publish}</p>`, (err) => {
+  const html = `<!DOCTYPE html>
+  <html lang="en">
+    <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Static Warp blog</title>
+  <style>
+    @media (max-width: 800px) {
+    body > div {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    height: auto !important;
+  }
+    body > div > div,
+    body > div > iframe {
+    width: 90% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    margin: 2% 0 0 0 !important;
+    height: auto !important;
+  }
+    body > div > iframe {
+    min-height: 400px;
+    height: 70vh !important;
+  }
+  }
+  </style>
+</head>
+  <body style="background-color: lightgray">
+  <div style="display: flex; align-items: flex-start; height: 100vh;">
+    <div style="
+      background-color: white;
+      box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+      border-radius: 5px;
+      padding: 16px;
+      height: 75%;
+      display: inline-block;
+      text-align: center;
+      margin: 5% 2% 0 10%;
+      min-width: 350px;
+      max-width: 600px;
+      flex-shrink: 0;
+    ">
+      <div style="background-image: url('starfield2_0.png'); font-size: large; border: 1px solid black;"><h1 style="color: #7795d6; ">${newBlog.subject}</h1></div>
+      <div><p style=" font-size: large; word-break: break-word; max-width: 100ch; text-align: left;">${newBlog.blog}</p></div>
+      <div style="text-align: left; font-size: large; color: #808080"><p>Written By: ${newBlog.author}</p> <p> Published on: ${newBlog.publishDate}</p></div>
+      <p hidden="">${newBlog.publish}</p>
+      <p>* Google ads go here! *</p></div>
+    <div style="position: absolute;
+            bottom: 0px;
+
+">
+    </div>
+    <iframe src="blog-list-templae.html"
+            style="height: 75%; width: 600px; border: none; margin-top: 5%;">
+    </iframe>
+  </div>
+  </body>
+</html>`;
+
+
+  fs.writeFile(`./blogs/blog-${id}.html`, html, (err) => {
     if (err) {
       console.log(err);
     } else {
